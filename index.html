@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Find Your Partner</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            transition: background 0.5s, color 0.5s;
+        }
+
+        .light-theme {
+            background: linear-gradient(to right, #ffecd2, #fcb69f);
+            color: black;
+        }
+
+        .dark-theme {
+            background: linear-gradient(to right, #232526, #414345);
+            color: white;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            margin: auto;
+            transition: background 0.5s;
+        }
+
+        .dark-theme .container {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+        }
+
+        input, select, button {
+            margin: 10px;
+            padding: 10px;
+            width: 90%;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button {
+            background: #ff6f61;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #ff3b2f;
+        }
+
+        #result, #recent-matches {
+            font-size: 18px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .light-theme .theme-toggle {
+            background: #ddd;
+            color: black;
+        }
+
+        #recent-matches {
+            margin-top: 30px;
+            font-size: 16px;
+            text-align: left;
+            max-width: 400px;
+            margin: auto;
+        }
+    </style>
+</head>
+<body class="light-theme">
+
+    <button class="theme-toggle" onclick="toggleTheme()">Dark Mode</button>
+
+    <div class="container">
+        <h2>Find Your Partner</h2>
+        <input type="text" id="name" placeholder="Enter your name">
+        <select id="gender">
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+        </select>
+        <button onclick="findPartner()">Find Partner</button>
+        <p id="result"></p>
+    </div>
+
+    <div id="recent-matches">
+        <h3>Recent Matches:</h3>
+        <ul id="matches-list"></ul>
+    </div>
+
+    <script>
+        const males = ["Azaan", "Zayan", "Rayan", "Umer", "Hamza", "Fahad", "Mohammad", "Uzair", "Nabeel", "Abdullah", "Ayan", "Kala"];
+        const females = ["Wania", "Eman", "Faiza", "Fatima", "Esha", "Grisha", "Zainab", "Sheeza", "Alvisha", "Atiqa", "Habiba", "Madiha", "Khurram", "Sonu", "Shahida", "Anarkali"];
+
+        const quotes = [
+            "Love is in the air! ❤️",
+            "Looks like destiny is on your side! ✨",
+            "A perfect match made by fate! 🔥",
+            "Your love story begins here! 💖",
+            "A new adventure awaits you both! 🚀"
+        ];
+
+        let recentMatches = [];
+
+        function findPartner() {
+            let name = document.getElementById("name").value.trim();
+            let gender = document.getElementById("gender").value;
+            let result = document.getElementById("result");
+
+            if (name === "" || name.length < 3) {
+                result.innerHTML = "Please enter a valid name (min 3 letters)!";
+                return;
+            }
+
+            name = name.toLowerCase(); // Convert to lowercase for case-insensitive match
+
+            // Special name conditions
+            const specialNames = {
+                "zayan": "Single life is better for you! 😆",
+                "azaan": "Zainab ka kata hua! 🤣",
+                "umer": "Grisha ka larka! 😏",
+                "rayan": "Your life partner is Fatima! ❤️",
+                "wania": "Your life partner is Azaan! 😜",
+                "eman": "IG 😂🤣🤣",
+                "iman": "IG 😂🤣🤣"
+            };
+
+            if (specialNames[name]) {
+                result.innerHTML = specialNames[name];
+                return;
+            }
+
+            let partner = (gender === "male") 
+                ? females[Math.floor(Math.random() * females.length)]
+                : males[Math.floor(Math.random() * males.length)];
+
+            let quote = quotes[Math.floor(Math.random() * quotes.length)];
+            result.innerHTML = `${name.charAt(0).toUpperCase() + name.slice(1)}, your partner is <strong>${partner}</strong>! <br> <em>${quote}</em>`;
+
+            updateRecentMatches(name, partner);
+        }
+
+        function updateRecentMatches(name, partner) {
+            recentMatches.unshift(`${name.charAt(0).toUpperCase() + name.slice(1)} ❤️ ${partner}`);
+            if (recentMatches.length > 5) {
+                recentMatches.pop();
+            }
+
+            let matchesList = document.getElementById("matches-list");
+            matchesList.innerHTML = recentMatches.map(match => `<li>${match}</li>`).join("");
+        }
+
+        function toggleTheme() {
+            let body = document.body;
+            let themeButton = document.querySelector(".theme-toggle");
+
+            if (body.classList.contains("light-theme")) {
+                body.classList.remove("light-theme");
+                body.classList.add("dark-theme");
+                themeButton.innerHTML = "Light Mode";
+            } else {
+                body.classList.remove("dark-theme");
+                body.classList.add("light-theme");
+                themeButton.innerHTML = "Dark Mode";
+            }
+        }
+    </script>
+
+</body>
+</html>
